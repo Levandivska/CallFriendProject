@@ -13,18 +13,16 @@ class LoginViewModel{
     var dataCollector: DataCollector
     
     var agoraRtmkit = AgoraRtmKit(appId: AppID.id , delegate: nil)
-//    var isLoggedIn = false
-//    var loggedUserName: String? = nil
+    
 
     init(dataCollector: DataCollector){
         self.dataCollector = dataCollector
     }
     
-    func login(username: String){
+    func login(username: String) -> Bool{
         agoraRtmkit?.login(byToken: nil, user: username) { [weak self] (errorCode) in
             guard errorCode == .ok else {
-                //
-                return
+                return 
             }
             
             print("User logged in")
@@ -33,7 +31,6 @@ class LoginViewModel{
             self?.dataCollector.isLoggedIn = true
             NotificationCenter.default.post(name: Notification.Name(NotificationEvent.loggedIn.rawValue), object: nil)
 
-            
 //            self.setAgoraCallkit(AgoraRtm.kit?.getRtmCall())
             
 //            print("logged in")
@@ -41,6 +38,7 @@ class LoginViewModel{
 //            callKit?.callDelegate = self
 //            AgoraRtm.status = .online
         }
+        return true
     }
     
 }

@@ -15,6 +15,8 @@ extension MainViewModel: AgoraRtcEngineDelegate {
     }
   
   func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-//    hangup(reason: .complited)
+      if call?.callType == .normal{
+          self.hangUp()
+      }
   }
 }

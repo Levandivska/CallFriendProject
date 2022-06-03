@@ -38,7 +38,6 @@ class MainViewModel: NSObject, ObservableObject{
     var lastOutgoingInvitation: AgoraRtmLocalInvitation? = nil
 
     init(agoraRtmCallKit: AgoraRtmCallKit){
-//        self.calleeName = calleeName
         self.agoraRtmCallKit = agoraRtmCallKit
         self.agoraRtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: AppID.id, delegate: nil)
     }
@@ -49,7 +48,6 @@ class MainViewModel: NSObject, ObservableObject{
     
     
     func startCall(to callees: String){
-    //    self.channelName = generate channel
         let calleesArray = callees.components(separatedBy: " ")
         if calleesArray.count == 1{
             sendInvitation(to: calleesArray[0], callType: .normal)
@@ -76,7 +74,7 @@ class MainViewModel: NSObject, ObservableObject{
           }
             
             self?.lastOutgoingInvitation = invitation
-            self?.call = Call(state: Call.State.initiating, direction: Call.Direction.outgoing, callType: callType, caller: "Someone", callees: [calleeId])
+            self?.call = Call(state: Call.State.initiating, direction: Call.Direction.outgoing, callType: callType, caller: "Someone", callees: [calleeId], channelId: self?.channelName)
             
         print("success to send invintation")
     
@@ -84,6 +82,7 @@ class MainViewModel: NSObject, ObservableObject{
     }
     
     func acceptCall() {
+        
       guard let remoteInvite = self.lastIncomingInvitation else { return }
         agoraRtmCallKit.accept(remoteInvite, completion: { [weak self] result in
         
@@ -92,7 +91,7 @@ class MainViewModel: NSObject, ObservableObject{
             self.agoraRtcKit.joinChannel(byToken: nil, channelId: self.channelName, info: nil, uid: 0, joinSuccess: {(channel, uid, elapsed) in
 
                 let lastCall = self.call
-                self.call = Call(state: .started, direction: lastCall!.direction, callType: lastCall!.callType, caller: lastCall!.caller, callees: lastCall!.allCallees)
+                self.call = Call(state: .started, direction: lastCall!.direction, callType: lastCall!.callType, caller: lastCall!.caller, callees: lastCall!.allCallees, channelId: lastCall!.chanelId)
                 
           UIApplication.shared.isIdleTimerDisabled = true
         })
@@ -111,7 +110,7 @@ class MainViewModel: NSObject, ObservableObject{
         self.call!.state = .started
         
         let lastCall = self.call
-        self.call = Call(state: .started, direction: lastCall!.direction, callType: lastCall!.callType, caller: lastCall!.caller, callees: lastCall!.allCallees)
+        self.call = Call(state: .started, direction: lastCall!.direction, callType: lastCall!.callType, caller: lastCall!.caller, callees: lastCall!.allCallees, channelId: self.channelName)
     }
     
     private func cancelLocalInvite(){
@@ -119,7 +118,6 @@ class MainViewModel: NSObject, ObservableObject{
       agoraRtmCallKit.cancel(localInvite, completion: { _ in
       })
     }
-    
     
     func hangUp(){
         if self.call!.state == .started{
@@ -141,10 +139,8 @@ class MainViewModel: NSObject, ObservableObject{
     
     func getIncommingCall(callerName: String, callType: Call.CallType, channelId: String ){
         self.channelName = channelId
-        self.call = Call(state: .initiating, direction: .incomming, callType: callType, caller: callerName, callees: [callerName] + ["Me", "Ьaybe someone else"])
+        self.call = Call(state: .initiating, direction: .incomming, callType: callType, caller: callerName, callees: [""], channelId: channelId)
     }
-    
-    
     
     private func leaveChannel() {
         agoraRtcKit.leaveChannel(nil)

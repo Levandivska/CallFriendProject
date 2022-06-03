@@ -26,7 +26,6 @@ class ContentViewModel: ObservableObject{
     init(){
         let collector = DataCollector()
         self.dataCollector = collector
-//        self.mainViewModel = MainViewModel()
         self.loginViewModel = LoginViewModel(dataCollector: collector)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.loggedInNotification(notification:)), name: Notification.Name(NotificationEvent.loggedIn.rawValue), object: nil)
@@ -35,22 +34,13 @@ class ContentViewModel: ObservableObject{
     
     
     @objc func loggedInNotification(notification: Notification) {
-        self.mainViewModel = MainViewModel(agoraRtmCallKit: dataCollector.agoraCallKit!)
+        guard let agoraCallKt = dataCollector.agoraCallKit else { return }
+        self.mainViewModel = MainViewModel(agoraRtmCallKit: agoraCallKt)
         self.mainViewModel.setCallDelegate()
         self.state = CurrentState.main
         
     }
 
-    
-//    func initMainViewModel(){
-//        guard let callKit = loginViewModel.agoraRtmkit?.getRtmCall(),
-//              let userName = loginViewModel.loggedUserName
-//        else { return }
-//        
-//        self.mainViewModel = MainViewModel(calleeName: userName, agoraRtmCallKit: callKit)
-//        self.mainViewModel.setCallDelegate()
-//        
-//    }
 }
 
 

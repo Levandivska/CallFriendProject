@@ -8,13 +8,27 @@
 import SwiftUI
 
 struct SpeakingView: View {
+    var speakers: [String]
+    var hangUpAction: () -> ()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("Conversation with: \(speakers.joined(separator: ", "))")
+            
+            Button(action: {
+                hangUpAction()
+            }, label: {
+                Text("Hung Up")
+            })
+        }
+
+        
+        
     }
 }
 
-struct SpeakingView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpeakingView()
-    }
-}
+//struct SpeakingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SpeakingView(speakers: ["Marry", "Mykola", "Taras"])
+//    }
+//}

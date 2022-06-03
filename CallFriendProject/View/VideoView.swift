@@ -9,7 +9,9 @@
 import SwiftUI
 import AgoraRtcKit
 
-struct ContentView : View {
+struct VideoView : View {
+    
+    let channelId: String
     @State var isLocalInSession = false
     @State var isLocalAudioMuted = false
     
@@ -70,13 +72,13 @@ struct ContentView : View {
     }
 }
 
-extension ContentView {
+extension VideoView {
     func log(content: String) {
         print(content)
     }
 }
 
-fileprivate extension ContentView {
+fileprivate extension VideoView {
     func initializeAgoraEngine() {
         // init AgoraRtcEngineKit
         videoEngine.contentView = self
@@ -122,7 +124,7 @@ fileprivate extension ContentView {
         // same channel successfully using the same app id.
         // 2. One token is only valid for the channel name that
         // you use to generate this token.
-        rtcEngine.joinChannel(byToken: Token, channelId: "demoChannel1", info: nil, uid: 0, joinSuccess: nil)
+        rtcEngine.joinChannel(byToken: AppID.token, channelId: channelId, info: nil, uid: 0, joinSuccess: nil)
     }
 
     func leaveChannel() {
@@ -131,7 +133,7 @@ fileprivate extension ContentView {
     }
 }
 
-fileprivate extension ContentView {
+fileprivate extension VideoView {
     func toggleLocalSession() {
         isLocalInSession.toggle()
         if isLocalInSession {
@@ -152,8 +154,8 @@ fileprivate extension ContentView {
     }
 }
 
-struct ContentView_Previews : PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews : PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

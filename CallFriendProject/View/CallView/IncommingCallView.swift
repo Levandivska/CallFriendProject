@@ -8,13 +8,35 @@
 import SwiftUI
 
 struct IncommingCallView: View {
+    var acceptCallAction: () -> ()
+    var hungUpAction: () -> ()
+    var caller: String
+    var speakers: [String]? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("Call from \(caller)")
+            
+            HStack{
+                Button(action: { acceptCallAction() }, label: { Text("Accept")
+                        .background(Color.green)
+                        .padding()
+                }
+                )
+                Spacer()
+                
+                Button(action: {hungUpAction() }, label: {Text("Hang up")
+                        .background(Color.red)
+                        .padding()
+                            }
+                    )
+                }
+        }
     }
 }
 
-struct IncommingCallView_Previews: PreviewProvider {
-    static var previews: some View {
-        IncommingCallView()
-    }
-}
+//struct IncommingCallView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        IncommingCallView()
+//    }
+//}

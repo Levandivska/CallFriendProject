@@ -6,6 +6,8 @@
 //
 
 import XCTest
+@testable import CallFriendProject
+
 
 class CallInvitation: XCTestCase {
 
